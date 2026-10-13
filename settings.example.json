@@ -1,17 +1,57 @@
 {
-  "idle_timeout": 10,
-  "email_smtp_server": "smtp.gmail.com",
-  "email_smtp_port": 587,
-  "email_sender": "your-email@gmail.com",
-  "email_password": "PASTE_APP_PASSWORD_HERE",
-  "email_receiver": "master@example.com",
-  "email_send_time_morning": "09:00",
-  "email_send_time_evening": "20:00",
-  "auto_send_reports": true,
-  "show_employee_photos": true,
-  "animation_enabled": true,
-  "font_size_scale": 1.5,
-  "face_recognition_enabled": false,
-  "face_recognition_confidence": 0.7,
-  "show_work_time_on_card": false
+  "employees": [
+    {"id": 1,  "name": "Иванов",     "first_name": "Иван",     "position": "Слесарь",   "avatar": "💡"},
+    {"id": 2,  "name": "Петров",     "first_name": "Пётр",     "position": "Наладчик",  "avatar": "🔧"},
+    {"id": 3,  "name": "Сидорова",   "first_name": "Анна",     "position": "ОТК",       "avatar": "👨‍🔬"},
+    {"id": 4,  "name": "Кузнецов",   "first_name": "Сергей",   "position": "Оператор",  "avatar": "👨‍🔧"},
+    {"id": 5,  "name": "Смирнов",    "first_name": "Алексей",  "position": "Оператор",  "avatar": "👨‍🔧"},
+    {"id": 6,  "name": "Попов",      "first_name": "Григорий", "position": "Оператор",  "avatar": "👨‍🔧"},
+    {"id": 7,  "name": "Волков",     "first_name": "Иван",     "position": "Наладчик",  "avatar": "🔧"},
+    {"id": 8,  "name": "Морозова",   "first_name": "Елена",    "position": "ОТК",       "avatar": "👨‍🔬"},
+    {"id": 9,  "name": "Новиков",    "first_name": "Сергей",   "position": "Универсал", "avatar": "🔥"},
+    {"id": 10, "name": "Фёдорова",   "first_name": "Дарья",    "position": "ОТК",       "avatar": "👨‍🔬"},
+    {"id": 11, "name": "Егорова",    "first_name": "Юлия",     "position": "ОТК",       "avatar": "👨‍🔬"},
+    {"id": 12, "name": "Никитин",    "first_name": "Игорь",    "position": "Оператор",  "avatar": "👨‍🔧"},
+    {"id": 13, "name": "Орлов",      "first_name": "Алексей",  "position": "Оператор",  "avatar": "👨‍🔧"},
+    {"id": 14, "name": "Русланов",   "first_name": "Руслан",   "position": "Слесарь",   "avatar": "💡"},
+    {"id": 15, "name": "TEST",       "first_name": "test",     "position": "test",      "avatar": "💡"}
+  ],
+
+  "parts": [
+    {"name": "Толкатели",          "stock": 300,  "status": "Ежедневно",  "color": "#B51A34"},
+    {"name": "Корпус Cummins",     "stock": 302,  "status": "Необходимо", "color": "#FF9800"},
+    {"name": "Корпус газ",         "stock": 3000, "status": "В наличии",  "color": "#00FF7B"},
+    {"name": "Звезда промвала E3", "stock": 1000, "status": "Необходимо", "color": "#D4DE15"}
+  ],
+
+  "camera_settings": {
+    "camera_id": 0,
+    "photo_width": 640,
+    "photo_height": 480,
+    "save_path": "photos",
+    "photo_format": "jpg",
+    "preview_duration": 3000,
+    "flash_enabled": true,
+    "auto_focus": true
+  },
+
+  "app_settings": {
+    "idle_timeout": 120,
+    "email_smtp_server": "smtp.gmail.com",
+    "email_smtp_port": 587,
+    "email_sender": "your-email@gmail.com",
+    "email_password": "PASTE_APP_PASSWORD_HERE",
+    "email_receiver": "master@example.com",
+    "email_send_time_morning": "09:00",
+    "email_send_time_evening": "20:00",
+    "auto_send_reports": true,
+    "show_employee_photos": true,
+    "animation_enabled": true,
+    "font_size_scale": 1.5,
+    "face_recognition_enabled": false,
+    "face_recognition_confidence": 0.7,
+    "show_work_time_on_card": false
+  },
+
+  "admin_password": "123"
 }
