@@ -55,6 +55,8 @@ class TouchTerminalApp:
         self.update_weather()                        # первый вызов сразу
         self.schedule_weather_update()               # ← повтор каждые 15 минут
 
+        # ✅ Новости — обновляем каждые 30 минут
+        self.schedule_news_update()
 
         if self.settings.get('animation_enabled', True):
             self.start_star_animation()
@@ -202,6 +204,90 @@ class TouchTerminalApp:
 
         self.root.after(WEATHER_UPDATE_INTERVAL_MS, _do_update)  
 
+    def _create_news_widget(self, parent):
+        """Блок новостей на экране ожидания"""
+        from src.news import get_news
+
+        try:
+            news = get_news()
+        except Exception as e:
+            print(f"⚠️ Не удалось получить новости: {e}")
+            news = []
+
+        if not news:
+            return
+
+        frame = tk.Frame(parent, bg='#0a0a1a')
+        frame.pack(pady=15, fill='x', padx=40)
+
+        title = tk.Label(
+            frame,
+            text="📰 НОВОСТИ ЭЛЕКТРОСТАЛИ",
+            font=("Arial", 18, "bold"),
+            bg='#0a0a1a',
+            fg='#e94560'
+        )
+        title.pack(anchor='w', pady=(0, 8))
+
+        # Показываем первые 3 новости
+        for item in news[:3]:
+            row = tk.Frame(frame, bg='#1a1a3e', padx=10, pady=8)
+            row.pack(fill='x', pady=3)
+
+            # Картинка (если есть локально)
+            local_img = item.get("local_image")
+            if local_img and os.path.exists(local_img):
+                try:
+                    from PIL import Image, ImageTk
+                    img = Image.open(local_img)
+                    img.thumbnail((80, 80))
+                    photo = ImageTk.PhotoImage(img)
+                    lbl = tk.Label(row, image=photo, bg='#1a1a3e')
+                    lbl.image = photo  # ← сохранить ссылку!
+                    lbl.pack(side='left', padx=(0, 10))
+                except Exception:
+                    pass
+
+            # Текст новости
+            text_frame = tk.Frame(row, bg='#1a1a3e')
+            text_frame.pack(side='left', fill='x', expand=True)
+
+            news_title = tk.Label(
+                text_frame,
+                text=item["title"][:120],
+                font=("Arial", 13, "bold"),
+                bg='#1a1a3e',
+                fg='white',
+                anchor='w',
+                justify='left',
+                wraplength=800
+            )
+            news_title.pack(anchor='w')
+
+            src = tk.Label(
+                text_frame,
+                text="Источник: regions.ru",
+                font=("Arial", 9),
+                bg='#1a1a3e',
+                fg='#8888aa',
+                anchor='w'
+            )
+            src.pack(anchor='w')
+
+    def schedule_news_update(self):
+        NEWS_UPDATE_INTERVAL_MS = 30 * 60 * 1000  # 30 минут
+
+        def _do_update():
+            try:
+                from src.news import get_news
+                get_news(force_refresh=True)
+            except Exception as e:
+                print(f"⚠️ Ошибка обновления новостей: {e}")
+            finally:
+                self.root.after(NEWS_UPDATE_INTERVAL_MS, _do_update)
+
+        self.root.after(NEWS_UPDATE_INTERVAL_MS, _do_update)
+
     def update_employee_times(self):
         from src.config import get_employee_status, get_work_time
 
@@ -284,6 +370,9 @@ class TouchTerminalApp:
             fg='white'
         )
         weather_label.pack(pady=10)
+
+         # ✅ Новости
+        self._create_news_widget(self.idle_frame)
 
         hint = tk.Label(
             self.idle_frame,
