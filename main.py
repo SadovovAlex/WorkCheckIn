@@ -50,7 +50,11 @@ class TouchTerminalApp:
 
         self.update_time()
         self.update_employee_times()
-        self.update_weather()
+
+         # ✅ Периодическое обновление погоды
+        self.update_weather()                        # первый вызов сразу
+        self.schedule_weather_update()               # ← повтор каждые 15 минут
+
 
         if self.settings.get('animation_enabled', True):
             self.start_star_animation()
@@ -181,6 +185,23 @@ class TouchTerminalApp:
             except Exception as e:
                 print(f"Ошибка обновления погоды: {e}")
 
+    def schedule_weather_update(self):
+        """Планирует обновление погоды каждые 15 минут (900 000 мс)"""
+        WEATHER_UPDATE_INTERVAL_MS = 15 * 60 * 1000   # 15 минут
+
+        def _do_update():
+            try:
+                self.update_weather()
+                # Обновляем глобальный WEATHER в config, чтобы idle-экран тоже видел свежие данные
+                import src.config as _cfg
+                _cfg.WEATHER = _cfg.get_weather()
+            except Exception as e:
+                print(f"⚠️ Ошибка обновления погоды: {e}")
+            finally:
+                self.root.after(WEATHER_UPDATE_INTERVAL_MS, _do_update)
+
+        self.root.after(WEATHER_UPDATE_INTERVAL_MS, _do_update)  
+
     def update_employee_times(self):
         from src.config import get_employee_status, get_work_time
 
@@ -252,8 +273,9 @@ class TouchTerminalApp:
         )
         self.idle_date_label.pack()
 
-        from src.config import WEATHER
-        weather_text = f"{WEATHER['icon']} {WEATHER['temp']} | {WEATHER['condition']}"
+        from src.config import get_current_weather
+        w = get_current_weather()
+        weather_text = f"{w['icon']} {w['temp']} | {w['condition']}"
         weather_label = tk.Label(
             self.idle_frame,
             text=weather_text,

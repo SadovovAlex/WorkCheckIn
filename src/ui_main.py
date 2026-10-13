@@ -6,7 +6,7 @@ import json
 import os
 
 from src.config import (
-    EMPLOYEES, WEATHER, APP_SETTINGS,
+    EMPLOYEES, APP_SETTINGS,
     get_employee_status, get_work_time,
     get_current_weather, save_state,
 )
@@ -95,7 +95,9 @@ class MainUI:
         weather_frame = tk.Frame(top_panel, bg='#0a0a1a')
         weather_frame.pack(side='left', padx=(5, 0), anchor='w')
 
-        weather_text = f"{WEATHER['icon']} {WEATHER['temp']} | {WEATHER['condition']} | 💧 {WEATHER['humidity']}"
+        w = get_current_weather()
+        weather_text = f"{w['icon']} {w['temp']} | {w['condition']} | 💧 {w['humidity']}"
+    
         self.weather_label = tk.Label(
             weather_frame,
             text=weather_text,

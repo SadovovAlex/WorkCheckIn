@@ -143,19 +143,19 @@ class WeatherService:
         return weather
 
     def get_weather(self):
-        """Получить текущую погоду"""
-        # Кеширование на 30 минут
-        if self.last_update:
+        """Получить текущую погоду (кеш 15 минут)"""
+        # ✅ Кеширование на 15 минут, с корректным подсчётом
+        if self.last_update and self.cache:
             delta = datetime.now() - self.last_update
-            if delta.seconds < 1800 and self.cache:
+            if delta.total_seconds() < 900:   # 15 минут
                 return self.cache
 
-        # 1) wttr.in — самый надёжный
+        # 1) Основные источники
         for name, fn in (
-           #("wttr.in",     self._get_wttr),
-            #("Gismeteo",    self._get_gismeteo),
-            ("Яндекс",      self._get_yandex),
-            #("Open-Meteo",  self._get_open_meteo),
+            # ("wttr.in",    self._get_wttr),
+            # ("Gismeteo",   self._get_gismeteo),
+            ("Яндекс",       self._get_yandex),
+            # ("Open-Meteo", self._get_open_meteo),
         ):
             try:
                 t = time.time()
@@ -169,25 +169,15 @@ class WeatherService:
             except Exception as e:
                 self._log(f"❌ {name} ошибка: {e}", "ERROR")
 
+        # Если источник не сработал — вернуть кеш (даже устаревший)
         if self.cache:
-            self._log("⚠️ Отдаём кеш", "WARNING")
+            self._log("⚠️ Отдаём кеш (источники не ответили)", "WARNING")
             return self.cache
+
+        # Совсем ничего — дефолт
         return {
             "temp": "+-1°C", "condition": "неЯсно", "icon": "☀️",
             "humidity": "0%", "wind": "0 м/с"
-        }
-        
-        # Если ничего не получилось, возвращаем кеш или дефолтные данные
-        if self.cache:
-            return self.cache
-        
-        # Дефолтные данные
-        return {
-            "temp": "+-1°C",
-            "condition": "неЯсно",
-            "icon": "☀️",
-            "humidity": "0%",
-            "wind": "0 м/с"
         }
     
     def _get_gismeteo(self):
