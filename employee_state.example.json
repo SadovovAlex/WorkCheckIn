@@ -1,0 +1,13 @@
+{
+  "employee_status": {
+    "1": {
+      "status": "off",
+      "time": null,
+      "date": null,
+      "checkout_time": null,
+      "forgot_checkout": false
+    }
+  },
+  "employee_history": {},
+  "saved_at": "2026-01-01T00:00:00"
+}

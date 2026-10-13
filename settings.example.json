@@ -1,0 +1,17 @@
+{
+  "idle_timeout": 10,
+  "email_smtp_server": "smtp.gmail.com",
+  "email_smtp_port": 587,
+  "email_sender": "your-email@gmail.com",
+  "email_password": "PASTE_APP_PASSWORD_HERE",
+  "email_receiver": "master@example.com",
+  "email_send_time_morning": "09:00",
+  "email_send_time_evening": "20:00",
+  "auto_send_reports": true,
+  "show_employee_photos": true,
+  "animation_enabled": true,
+  "font_size_scale": 1.5,
+  "face_recognition_enabled": false,
+  "face_recognition_confidence": 0.7,
+  "show_work_time_on_card": false
+}
