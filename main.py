@@ -68,6 +68,9 @@ class TouchTerminalApp:
         from src.scheduler import scheduler
         scheduler.start()
 
+        from src.api_reporter import start_reporter
+        start_reporter()
+
         self.root.bind('<Button-1>', self.on_touch)
         self.root.bind('<Escape>', lambda e: self.main_ui.on_exit_click())
         self.root.bind('<Key>', self.on_key_press)

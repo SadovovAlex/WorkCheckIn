@@ -50,7 +50,11 @@
     "font_size_scale": 1.5,
     "face_recognition_enabled": false,
     "face_recognition_confidence": 0.7,
-    "show_work_time_on_card": false
+    "show_work_time_on_card": false,
+    "api_enabled": true,
+    "api_url": "http://ваш-сервер/api/checkin",
+    "api_key": "СЮДА_ВСТАВИТЬ_КЛЮЧ_ИЗ_МЕНЮ_CHECKIN",
+    "terminal_name": "Терминал 1"
   },
 
   "admin_password": "123"

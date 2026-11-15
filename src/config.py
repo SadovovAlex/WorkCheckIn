@@ -67,6 +67,10 @@ DEFAULT_APP_SETTINGS = {
     "face_recognition_enabled": False,
     "face_recognition_confidence": 0.7,
     "show_work_time_on_card": False,
+    "api_enabled": False,
+    "api_url": "http://127.0.0.1:8080/api/checkin",
+    "api_key": "",
+    "terminal_name": "Терминал 1",
 }
 
 
@@ -167,6 +171,12 @@ def save_state():
             json.dump(state, f, ensure_ascii=False, indent=2)
         os.replace(tmp_file, STATE_FILE)
         print(f"💾 Состояние сотрудников сохранено: {STATE_FILE}")
+        # При изменении состояния (пришел/ушел/автозакрытие) — отправляем срез в API
+        try:
+            from src.api_reporter import send_async
+            send_async(state)
+        except Exception as e:
+            print(f"⚠️ API-репортер недоступен: {e}")
         return True
     except Exception as e:
         print(f"❌ Ошибка сохранения состояния: {e}")

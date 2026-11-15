@@ -378,6 +378,92 @@ class SettingsDialog:
         )
         hint_label.pack(pady=(5, 0))
 
+        # ============================================================
+        # Секция: Отправка срезов состояния в систему (API)
+        # ============================================================
+        row += 1
+        self.create_section(parent, "🌐 ОТПРАВКА В СИСТЕМУ (API)", row + 1)
+        row += 2
+
+        # Включить отправку
+        self.create_checkbox(
+            parent, row,
+            "📡 Отправлять срез состояния в API",
+            "api_enabled"
+        )
+        row += 1
+
+        # Имя терминала
+        self.create_setting(
+            parent, row,
+            "🏷️ Имя терминала:",
+            "terminal_name"
+        )
+        row += 1
+
+        # URL API
+        self.create_setting(
+            parent, row,
+            "🔗 URL API (check-in):",
+            "api_url"
+        )
+        row += 1
+
+        # API-ключ
+        self.create_setting(
+            parent, row,
+            "🔑 API-ключ:",
+            "api_key",
+            is_password=True
+        )
+        row += 1
+
+        # Кнопка ручной отправки среза
+        api_frame = tk.Frame(parent, bg='#1a1a3e')
+        api_frame.grid(row=row, column=0, columnspan=2, sticky='ew', pady=10, padx=10)
+
+        api_btn = tk.Button(
+            api_frame,
+            text="📡 ОТПРАВИТЬ СРЕЗ СЕЙЧАС",
+            command=self.send_snapshot_now,
+            font=("Arial", 14, "bold"),
+            bg='#9C27B0',
+            fg='white',
+            width=30,
+            height=1,
+            relief='flat',
+            cursor='hand2'
+        )
+        api_btn.pack()
+
+        def on_api_btn_enter(e):
+            api_btn.config(bg='#ab47bc')
+
+        def on_api_btn_leave(e):
+            api_btn.config(bg='#9C27B0')
+
+        api_btn.bind('<Enter>', on_api_btn_enter)
+        api_btn.bind('<Leave>', on_api_btn_leave)
+
+        api_hint = tk.Label(
+            api_frame,
+            text="(Перед сохранением настроек срез уходит при каждом «пришел/ушел»)",
+            font=("Arial", 11),
+            bg='#1a1a3e',
+            fg='#8888aa'
+        )
+        api_hint.pack(pady=(5, 0))
+
+    def send_snapshot_now(self):
+        """Ручная отправка среза состояния в API"""
+        from src.api_reporter import send_snapshot, build_snapshot
+        self.show_notification("⏳ Отправка среза в API...")
+        ok, msg = send_snapshot(build_snapshot())
+        if ok:
+            self.show_notification("✅ Срез отправлен в систему!")
+        else:
+            self.show_notification(f"❌ Ошибка отправки: {msg[:80]}", is_error=True)
+
     def send_report_now(self):
         """Ручная отправка отчета"""
         # ✅ ИСПРАВЛЕНО: импорт от корня проекта

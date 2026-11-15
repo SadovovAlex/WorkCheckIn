@@ -56,6 +56,14 @@ class ReportScheduler:
         # Загружаем свежие настройки
         self._load_settings()
 
+        # Периодическая повторная отправка накопленных срезов (если API недоступен)
+        try:
+            from src.api_reporter import get_api_settings, load_pending, flush_queue
+            if get_api_settings()["enabled"] and load_pending():
+                flush_queue()
+        except Exception as e:
+            print(f"⚠️ Scheduler: API-очередь: {e}")
+
         if not self.settings.get("auto_send_reports", True):
             return
 
