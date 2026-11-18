@@ -46,7 +46,7 @@
 
 ```bash
 # 1. Клонировать репозиторий
-git clone https://github.com/<ваш-логин>/work-check-in.git
+git clone https://github.com/SadovovAlex/work-check-in.git
 cd work-check-in
 
 # 2. Создать виртуальное окружение
